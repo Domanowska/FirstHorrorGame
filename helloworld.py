@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+import time
 
 pygame.init()
 
@@ -9,6 +10,9 @@ fps_clock = pygame.time.Clock()
 
 display_surface = pygame.display.set_mode((800, 500))
 pygame.display.set_caption('House')
+
+pygame.mixer.music.load('Hallow_Wind.mp3')
+pygame.mixer.music.play(-1, 0.0)
 
 # Colors
 black = (0, 0, 0)
@@ -21,16 +25,18 @@ aqua = (0, 255, 255)
 shadow_img = pygame.image.load('spoopy_guy.png')
 shadowx = 600
 shadowy = 275
-# direction = 'right'
 
-smoke_ellipse_x = 85
-smoke_ellipse_y = 120
+font_obj = pygame.font.Font('freesansbold.ttf', 12)
+text_surface_obj = font_obj.render('made by wiki', True, maroon)
+text_rect_obj = text_surface_obj.get_rect()
+text_rect_obj.center = (600, 250)
 
 # Main Game Loop
 elapsed_time = 0
 while True:
     # Draw on the surface object
     display_surface.fill(black)
+    display_surface.blit(text_surface_obj, text_rect_obj)
     # House
     polygon_points = ((250, 200), (385, 285), (385, 470), (115, 470), (115, 285))
     pygame.draw.polygon(display_surface, white, polygon_points)
@@ -46,6 +52,8 @@ while True:
     pygame.draw.circle(display_surface, maroon, (230, 420), 7)
     # Chimney
     pygame.draw.rect(display_surface, white, (170, 300, 25, 75))
+    smoke_ellipse_x = 85
+    smoke_ellipse_y = 120
     # Stars
     pixel_obj = pygame.PixelArray(display_surface)
     pixel_obj[425][425] = white
@@ -97,11 +105,13 @@ while True:
     pygame.draw.line(display_surface, white, (675, 175), (695, 148), 2)
     pygame.draw.line(display_surface, white, (675, 175), (693, 205), 2)
 
-
     if elapsed_time > 5000:
         display_surface.blit(shadow_img, (shadowx, shadowy))
         if elapsed_time > 5250:
+            unidentified_sound_obj = pygame.mixer.Sound('Object_Grating_Metal.wav')
+            unidentified_sound_obj.play()
             elapsed_time = 0
+
 
     for event in pygame.event.get():
         if event.type == QUIT:
